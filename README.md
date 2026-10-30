@@ -37,6 +37,9 @@ python run.py
 
 The system will start on `http://127.0.0.1:8000/`.
 
+### Vercel deployment
+Vercel's function filesystem is read-only except for its temporary directory. When running on Vercel, runtime files (including the SQLite database, exports, and trained models) are stored under `/tmp/4pmspike` so the function can start. This storage is temporary and instance-local; changes may be lost when a function instance is recycled. Use a persistent database and file store before relying on Vercel for production data.
+
 ### Portal Entry Points
 | Interface | Route | Purpose |
 |---|---|---|
