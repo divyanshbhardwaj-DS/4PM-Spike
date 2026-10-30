@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSS-1.0 | Campus Energy Intelligence & Human-AI Decision Support System</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <style>
+    .landing-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+      padding: 60px 30px;
+      text-align: center;
+    }
+    .landing-hero h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+    .landing-hero p {
+      font-size: 1.15rem;
+      color: #94a3b8;
+      max-width: 720px;
+      margin: 0 auto 30px auto;
+      line-height: 1.6;
+    }
+    .login-cards-container {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      max-width: 900px;
+      margin: -40px auto 40px auto;
+      padding: 0 20px;
+      flex-wrap: wrap;
+    }
+    .login-card {
+      background: white;
+      border-radius: 12px;
+      padding: 36px 30px;
+      width: 380px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .login-card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .login-card h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+    .login-card p {
+      font-size: 0.88rem;
+      color: #64748b;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      flex: 1;
+    }
+    .principles-section {
+      max-width: 1000px;
+      margin: 20px auto 60px auto;
+      padding: 0 20px;
+    }
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .principle-box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .principle-box h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .principle-box p {
+      font-size: 0.82rem;
+      color: #64748b;
+      line-height: 1.5;
+    }
+    .advisory-banner {
+      background-color: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 16px 20px;
+      border-radius: 6px;
+      max-width: 860px;
+      margin: 0 auto 30px auto;
+      font-size: 0.88rem;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="landing-hero">
+    <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; margin-bottom: 16px;">
+      <span>AI SYNERGY HACKATHON 2026</span> &bull; <span>CASE 05: THE 4 PM SPIKE</span>
+    </div>
+    <h1>Campus Energy Decision Support System (DSS-1.0)</h1>
+    <p>
+      An offline-first, deterministic, advisory-only intelligence platform helping university electricians and campus energy managers understand, investigate, and manage electricity demand during the critical 16:00–20:00 peak period.
+    </p>
+
+    <div class="advisory-banner">
+      <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+      <div>
+        <strong>Deterministic Advisory Platform:</strong> This system does not automatically control electrical equipment. It delivers explainable, evidence-backed recommendations for human operational review and safety verification.
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="login-cards-container">
+      <!-- Electrician Entry -->
+      <div class="login-card">
+        <div class="login-card-icon" style="background-color: #eff6ff; color: #2563eb;">
+          <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        </div>
+        <h2>Electrician Portal</h2>
+        <p>
+          Inspect assigned campus buildings, verify meter CT polarities, investigate solar boundaries, check data quality flags, and submit technical field feedback.
+        </p>
+        <a href="/login/electrician" class="btn btn-primary" style="width: 100%;">Electrician Sign In &rarr;</a>
+      </div>
+
+      <!-- Management Entry -->
+      <div class="login-card">
+        <div class="login-card-icon" style="background-color: #ecfdf5; color: #059669;">
+          <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        </div>
+        <h2>Managing Team Portal</h2>
+        <p>
+          Campus-wide 4 PM peak analytics, submetering advisories, review electrician feedback, permitted decision overrides, model governance, and audit trails.
+        </p>
+        <a href="/login/management" class="btn btn-success" style="width: 100%;">Management Sign In &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Core Principles Section -->
+    <section class="principles-section">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h3 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Core Engineering Principles</h3>
+        <p style="color: #64748b; font-size: 0.9rem;">Architected strictly according to Section 2 of the DSS-1.0 PRD</p>
+      </div>
+
+      <div class="principles-grid">
+        <div class="principle-box">
+          <h4>1. 16:00–20:00 Demand Window</h4>
+          <p>Deterministic 15-minute intervals. The 20:00 interval is strictly excluded. Evaluates 16 intervals per day.</p>
+        </div>
+        <div class="principle-box">
+          <h4>2. 90% Completeness Gate</h4>
+          <p>Completeness is calculated against the scheduled interval expectation. Missing readings are NEVER zero-filled.</p>
+        </div>
+        <div class="principle-box">
+          <h4>3. Meter Boundary Truth</h4>
+          <p>Handles GROSS, NET, UNDECLARED, and CONFLICTING boundaries without unverified assumptions.</p>
+        </div>
+        <div class="principle-box">
+          <h4>4. E0–E3 Evidence Assessment</h4>
+          <p>Transparent evidential grading separate from severity. Human approval never automatically inflates evidence grades.</p>
+        </div>
+        <div class="principle-box">
+          <h4>5. Protected Building Safety</h4>
+          <p>Enforces safety restrictions on research labs, vivariums, and data centers. Management overrides cannot bypass safety.</p>
+        </div>
+        <div class="principle-box">
+          <h4>6. 13-Point Universal Explanation</h4>
+          <p>Every metric, badge, and recommendation provides a 13-point deterministic explanation via the "Why this result?" panel.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="text-align: center; padding: 24px; color: #64748b; font-size: 0.8rem; border-top: 1px solid #e2e8f0; background: white;">
+    DSS-1.0 Campus Energy Intelligence & Human-AI Decision Support System &bull; Version 1.0 &bull; Offline-First Operational Platform
+  </footer>
+
+</body>
+</html>
+

@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Management Dashboard | DSS-1.0</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <script src="/static/js/chart.min.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          DSS-1.0 Management
+        </h2>
+        <p>Campus Operations & Decision Authority</p>
+      </div>
+
+      <ul class="nav-menu">
+        <li class="nav-item active" data-section="msec-overview">1. Campus Overview</li>
+        <li class="nav-item" data-section="msec-peak-demand">2. Peak Demand Analysis</li>
+        <li class="nav-item" data-section="msec-building-explorer">3. Building Explorer</li>
+        <li class="nav-item" data-section="msec-meter-solar">4. Meter & Solar Analysis</li>
+        <li class="nav-item" data-section="msec-data-quality">5. Data Quality</li>
+        <li class="nav-item" data-section="msec-evidence">6. Evidence Assessment</li>
+        <li class="nav-item" data-section="msec-recommendations">7. AI/DSS Recommendations</li>
+        <li class="nav-item" data-section="msec-pending-reviews">
+          8. Pending Human Reviews
+          <span class="nav-item-badge" id="badgePendingReviews">0</span>
+        </li>
+        <li class="nav-item" data-section="msec-feedback">
+          9. Electrician Feedback
+          <span class="nav-item-badge" id="badgePendingFb">0</span>
+        </li>
+        <li class="nav-item" data-section="msec-investigations">10. Investigation Management</li>
+        <li class="nav-item" data-section="msec-human-ai-compare">11. Human-AI Comparison</li>
+        <li class="nav-item" data-section="msec-override-center">12. Decision Override Center</li>
+        <li class="nav-item" data-section="msec-safety">13. Safety & Protected Assets</li>
+        <li class="nav-item" data-section="msec-history">14. Decision History</li>
+        <li class="nav-item" data-section="msec-audit">15. Audit Logs</li>
+        <li class="nav-item" data-section="msec-dataset">16. Dataset Management</li>
+        <li class="nav-item" data-section="msec-model">17. Model Management</li>
+        <li class="nav-item" data-section="msec-reports">18. Reports & Exports</li>
+        <li class="nav-item" data-section="msec-settings">19. Settings</li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-badge">
+          <div>
+            <div id="mSidebarUserName" style="font-weight: 700;">Dr. Sarah Chen</div>
+            <div style="font-size: 0.72rem; color: #94a3b8;">Energy Operations Director</div>
+          </div>
+          <button class="btn btn-sm btn-secondary" onclick="logout()" title="Sign Out">Logout</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Viewport -->
+    <main class="main-viewport">
+      <header class="topbar">
+        <div class="topbar-title">
+          <span id="mActiveSectionTitle">1. Campus Overview</span>
+          <span class="status-indicator">
+            <span style="width: 8px; height: 8px; background: #059669; border-radius: 50%;"></span>
+            Advisory Decision Support Engine (Offline)
+          </span>
+        </div>
+        <div style="font-size: 0.8rem; color: #64748b;">
+          Operational Demand Window: <strong>16:00 &ndash; 20:00</strong>
+        </div>
+      </header>
+
+      <div class="content-scrollable">
+        <!-- 1. CAMPUS OVERVIEW -->
+        <section id="msec-overview" class="view-section">
+          <div class="metric-grid">
+            <div class="metric-card">
+              <div class="metric-title">Total Campus Buildings</div>
+              <div class="metric-value" id="mTotBuildings">0</div>
+              <div class="metric-subtext">Monitored in distribution network</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-title">Peak-Eligible (&ge;90%)</div>
+              <div class="metric-value" id="mEligibleBuildings" style="color: #059669;">0</div>
+              <div class="metric-subtext">Certified complete telemetry</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-title">Critical / High Severity</div>
+              <div class="metric-value" id="mCritHighFindings" style="color: #dc2626;">0</div>
+              <div class="metric-subtext">Reverse flow & spike alerts</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-title">Open Investigations</div>
+              <div class="metric-value" id="mOpenTasks" style="color: #ea580c;">0</div>
+              <div class="metric-subtext">Assigned to field electricians</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-title">Pending Management Reviews</div>
+              <div class="metric-value" id="mPendingReviews" style="color: #2563eb;">0</div>
+              <div class="metric-subtext">Recommendations requiring action</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-title">Protected Life-Safety Assets</div>
+              <div class="metric-value" id="mProtectedAssets" style="color: #b91c1c;">0</div>
+              <div class="metric-subtext">Strict non-sheddable priority</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Campus-Wide Peak Demand Distribution (16:00 &ndash; 20:00)</div>
+            </div>
+            <div style="height: 300px;">
+              <canvas id="chartCampusPeak"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. PEAK DEMAND ANALYSIS -->
+        <section id="msec-peak-demand" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Building Peak Ranking & 4 PM Spike Analysis</div>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="tablePeakRankings">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Building Name</th>
+                    <th>Category</th>
+                    <th>Peak kW (16:00-20:00)</th>
+                    <th>Average kW</th>
+                    <th>Trend</th>
+                    <th>Spike vs Baseline (%)</th>
+                    <th>Boundary Type</th>
+                    <th>Evidence</th>
+                    <th>Severity</th>
+                    <th>Decision</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td colspan="11" style="text-align: center; color: #64748b;">Loading peak analytics...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. BUILDING EXPLORER -->
+        <section id="msec-building-explorer" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Campus Building Registry & Eligibility Gates</div>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="tableBuildingExplorer">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Building</th>
+                    <th>Category</th>
+                    <th>Safety Classification</th>
+                    <th>Meters</th>
+                    <th>Evidence Grade</th>
+                    <th>Severity</th>
+                    <th>Eligibility Status</th>
+                    <th>Why Eligibility?</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. METER & SOLAR ANALYSIS -->
+        <section id="msec-meter-solar" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Meter Boundary Topology & Solar Net-Reconstruction</div>
+            </div>
+            <div id="meterSolarDetails"></div>
+          </div>
+        </section>
+
+        <!-- 5. DATA QUALITY -->
+        <section id="msec-data-quality" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Campus Data Quality Corruptions & Telemetry Gaps</div>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="tableManageDQ">
+                <thead>
+                  <tr>
+                    <th>Severity</th>
+                    <th>Building</th>
+                    <th>Meter</th>
+                    <th>Issue Category</th>
+                    <th>Rule Violated</th>
+                    <th>Telemetry Explanation</th>
+                    <th>Recommended Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. EVIDENCE ASSESSMENT -->
+        <section id="msec-evidence" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">E0–E3 Evidence Assessment Breakdown</div>
+            </div>
+            <div id="evidenceBreakdownContainer"></div>
+          </div>
+        </section>
+
+        <!-- 7. AI/DSS RECOMMENDATIONS -->
+        <section id="msec-recommendations" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Deterministic DSS Advisory Recommendations</div>
+            </div>
+            <div id="manageDecisionsContainer"></div>
+          </div>
+        </section>
+
+        <!-- 8. PENDING HUMAN REVIEWS -->
+        <section id="msec-pending-reviews" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Human Review Queue: Approve, Reject, Modify Recommendations</div>
+            </div>
+            <div id="pendingReviewsContainer"></div>
+          </div>
+        </section>
+
+        <!-- 9. ELECTRICIAN FEEDBACK -->
+        <section id="msec-feedback" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Electrician Field Submissions & Management Review</div>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="tableManageFeedback">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Electrician</th>
+                    <th>Building</th>
+                    <th>Category</th>
+                    <th>Observation</th>
+                    <th>Suggested Correction</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10. INVESTIGATION MANAGEMENT -->
+        <section id="msec-investigations" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Assign New Field Investigation Task to Electrician</div>
+            </div>
+            <form id="createTaskForm" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <div class="form-group">
+                <label>Target Building</label>
+                <select id="taskBuildingSelect" class="form-control" required></select>
+              </div>
+              <div class="form-group">
+                <label>Assign To Electrician</label>
+                <select id="taskUserSelect" class="form-control" required></select>
+              </div>
+              <div class="form-group">
+                <label>Priority</label>
+                <select id="taskPrioritySelect" class="form-control">
+                  <option value="CRITICAL">CRITICAL (Immediate safety / reverse power)</option>
+                  <option value="HIGH">HIGH (Major peak spike investigation)</option>
+                  <option value="MEDIUM" selected>MEDIUM (Routine boundary verification)</option>
+                  <option value="LOW">LOW</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Due Date</label>
+                <input type="date" id="taskDueDate" class="form-control">
+              </div>
+              <div class="form-group" style="grid-column: span 2;">
+                <label>Required Inspection</label>
+                <input type="text" id="taskRequiredInspection" class="form-control" placeholder="e.g. Test CT polarity on Main switchgear Phase B" required>
+              </div>
+              <div class="form-group" style="grid-column: span 2;">
+                <label>Management Instructions & Safety Precautions</label>
+                <textarea id="taskInstructions" class="form-control" rows="2" placeholder="Wear NFPA 70E Arc Flash PPE Category 2..."></textarea>
+              </div>
+              <div style="grid-column: span 2;">
+                <button type="submit" class="btn btn-primary">Dispatch Investigation Task &rarr;</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Campus Investigation Task Registry</div>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="tableManageTasks">
+                <thead>
+                  <tr>
+                    <th>Task ID</th>
+                    <th>Priority</th>
+                    <th>Building</th>
+                    <th>Assigned Electrician</th>
+                    <th>Required Inspection</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 11. HUMAN-AI COMPARISON -->
+        <section id="msec-human-ai-compare" class="view-section" style="display: none;">
+          <div class="metric-grid">
+            <div class="metric-card">
+              <div class="metric-title">Agreement Rate</div>
+              <div class="metric-value" id="mAgreementRate" style="color: #059669;">100%</div>
+              <div class="metric-subtext">Approved vs Modified/Overridden</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-title">Approved Recommendations</div>
+              <div class="metric-value" id="mApprovedCount">0</div>
+              <div class="metric-subtext">Adopted without change</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-title">Management Overrides</div>
+              <div class="metric-value" id="mOverrideCount" style="color: #ea580c;">0</div>
+              <div class="metric-subtext">Advisory overrides on record</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Human-AI Decision Comparison Matrix (PRD Section 16)</div>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="tableHumanAICompare">
+                <thead>
+                  <tr>
+                    <th>Building</th>
+                    <th>DSS Recommendation</th>
+                    <th>DSS Reason</th>
+                    <th>DSS Evidence</th>
+                    <th>Human Action</th>
+                    <th>Human Justification</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 12. DECISION OVERRIDE CENTER -->
+        <section id="msec-override-center" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Record Permitted Advisory Override</div>
+            </div>
+            <div class="advisory-banner">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              <div>
+                <strong>Audit Preservation Rule:</strong> Overrides preserve the original DSS recommendation, explanation, severity, and evidence grade immutably. Overrides on protected assets are blocked if safety is compromised.
+              </div>
+            </div>
+
+            <form id="overrideForm">
+              <div class="form-group">
+                <label>Select Decision to Override</label>
+                <select id="overrideDecisionSelect" class="form-control" required></select>
+              </div>
+              <div class="form-group">
+                <label>New Override Advisory Decision Code</label>
+                <select id="overrideCodeSelect" class="form-control" required>
+                  <option value="RECOMMEND_SUBMETERING">RECOMMEND_SUBMETERING</option>
+                  <option value="AUDIT_REGISTER">AUDIT_REGISTER</option>
+                  <option value="RESOLVE_BOUNDARY">RESOLVE_BOUNDARY</option>
+                  <option value="NO_ACTION">NO_ACTION</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Overridden Action Description</label>
+                <input type="text" id="overrideActionText" class="form-control" placeholder="Specify revised advisory action..." required>
+              </div>
+              <div class="form-group">
+                <label>Mandatory Engineering Justification (Min 10 characters)</label>
+                <textarea id="overrideJustification" class="form-control" rows="3" placeholder="Explain technical and operational rationale for departing from original DSS result..." required></textarea>
+              </div>
+              <button type="submit" class="btn btn-danger">Execute Advisory Override &rarr;</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- 13. SAFETY & PROTECTED BUILDINGS -->
+        <section id="msec-safety" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Campus Protected Life-Safety & Mission-Critical Facilities</div>
+            </div>
+            <div id="safetyCardsContainer"></div>
+          </div>
+        </section>
+
+        <!-- 14. DECISION HISTORY -->
+        <section id="msec-history" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Chronological Decision & Recommendation History</div>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="tableHistory">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Building</th>
+                    <th>Decision Code</th>
+                    <th>Evidence</th>
+                    <th>Severity</th>
+                    <th>Status</th>
+                    <th>Why?</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 15. AUDIT LOGS -->
+        <section id="msec-audit" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Append-Only Immutable Audit Trail (PRD Section 21)</div>
+              <div>
+                <button class="btn btn-sm btn-secondary" onclick="downloadAuditExport()">Export Audit CSV &darr;</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="tableAudit">
+                <thead>
+                  <tr>
+                    <th>Timestamp (UTC)</th>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Event Type</th>
+                    <th>Entity</th>
+                    <th>Action Details</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 16. DATASET MANAGEMENT (User's own dataset) -->
+        <section id="msec-dataset" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Import User's Own Campus Energy Dataset (PRD Section 7)</div>
+            </div>
+            <form id="datasetUploadForm" enctype="multipart/form-data">
+              <div class="form-group">
+                <label>Select Energy File (CSV, XLSX, or JSON)</label>
+                <input type="file" id="datasetFileInput" class="form-control" accept=".csv, .xlsx, .xls, .json" required>
+              </div>
+              <div class="form-group">
+                <label>Dataset Name</label>
+                <input type="text" id="datasetNameInput" class="form-control" value="Substation Feeder Telemetry">
+              </div>
+              <div class="form-group">
+                <label>Provenance Source</label>
+                <input type="text" id="datasetSourceInput" class="form-control" value="University SCADA Archive">
+              </div>
+              <button type="button" class="btn btn-secondary" onclick="previewDatasetFile()">1. Preview Columns & Map</button>
+              <button type="submit" class="btn btn-primary" id="btnConfirmImport" style="display: none;">2. Confirm Import & Run DSS Pipeline</button>
+            </form>
+
+            <div id="datasetPreviewBox" style="display: none; margin-top: 20px; background: #f8fafc; padding: 16px; border-radius: 6px; border: 1px solid #e2e8f0;">
+              <h4>Dataset Preview & Schema Mapping</h4>
+              <div id="previewMeta" style="font-size: 0.85rem; color: #64748b; margin: 8px 0;"></div>
+              <div style="margin-top: 12px;">
+                <label style="font-size: 0.82rem; font-weight: 700;">Column Mapping (Auto-Detected):</label>
+                <div id="mappingControls" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 6px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Stored Dataset Versions & Export Bundles</div>
+            </div>
+            <div id="datasetVersionsList"></div>
+          </div>
+        </section>
+
+        <!-- 17. MODEL MANAGEMENT (ML Governance) -->
+        <section id="msec-model" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Offline Machine Learning Model Training (PRD Section 17)</div>
+            </div>
+            <div style="margin-bottom: 16px;">
+              <p style="font-size: 0.85rem; color: #64748b;">
+                Models are optional enhancements strictly governed by Section 17. ML is only trained when the dataset has sufficient records and completeness. Time-aware validation prevents data leakage.
+              </p>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+              <button class="btn btn-secondary" onclick="checkMLSuitability()">1. Check Dataset Suitability</button>
+              <button class="btn btn-primary" onclick="trainMLModel()">2. Train Time-Aware Forecast Model</button>
+            </div>
+
+            <div id="mlSuitabilityBox" style="display: none; padding: 16px; border-radius: 6px; margin-bottom: 20px;"></div>
+            <div id="mlTrainingResultBox" style="display: none; padding: 16px; border-radius: 6px; background: #f0fdf4; border: 1px solid #bbf7d0; margin-bottom: 20px;"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Model Version Registry & Rollback Center</div>
+            </div>
+            <div id="modelRegistryList"></div>
+          </div>
+        </section>
+
+        <!-- 18. REPORTS & EXPORTS -->
+        <section id="msec-reports" class="view-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Campus Intelligence Reports Generator (PRD Section 19)</div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+              <div class="card" style="margin-bottom: 0;">
+                <h4>Peak Demand Report</h4>
+                <p style="font-size: 0.8rem; color: #64748b; margin: 8px 0 16px 0;">16:00-20:00 demand metrics across all buildings.</p>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('PEAK_DEMAND', 'CSV')">CSV</button>
+                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('PEAK_DEMAND', 'JSON')">JSON</button>
+                  <button class="btn btn-sm btn-primary" onclick="downloadReport('PEAK_DEMAND', 'PDF')">PDF</button>
+                </div>
+              </div>
+
+              <div class="card" style="margin-bottom: 0;">
+                <h4>Data Quality Report</h4>
+                <p style="font-size: 0.8rem; color: #64748b; margin: 8px 0 16px 0;">Audit findings, missing intervals, negative spikes.</p>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('DATA_QUALITY', 'CSV')">CSV</button>
+                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('DATA_QUALITY', 'JSON')">JSON</button>
+                  <button class="btn btn-sm btn-primary" onclick="downloadReport('DATA_QUALITY', 'PDF')">PDF</button>
+                </div>
+              </div>
+
+              <div class="card" style="margin-bottom: 0;">
+                <h4>Human-AI Synergy Report</h4>
+                <p style="font-size: 0.8rem; color: #64748b; margin: 8px 0 16px 0;">DSS recommendations vs human reviews and overrides.</p>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('HUMAN_AI_DECISION', 'CSV')">CSV</button>
+                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('HUMAN_AI_DECISION', 'JSON')">JSON</button>
+                  <button class="btn btn-sm btn-primary" onclick="downloadReport('HUMAN_AI_DECISION', 'PDF')">PDF</button>
+                </div>
+              </div>
+
+              <div class="card" style="margin-bottom: 0;">
+                <h4>Daily Campus Summary</h4>
+                <p style="font-size: 0.8rem; color: #64748b; margin: 8px 0 16px 0;">Executive overview of building statuses.</p>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('DAILY_CAMPUS_SUMMARY', 'CSV')">CSV</button>
+                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('DAILY_CAMPUS_SUMMARY', 'JSON')">JSON</button>
+                  <button class="btn btn-sm btn-primary" onclick="downloadReport('DAILY_CAMPUS_SUMMARY', 'PDF')">PDF</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 19. SETTINGS -->
+        <section id="msec-settings" class="view-section" style="display: none;">
+          <div class="card" style="max-width: 600px;">
+            <div class="card-header">
+              <div class="card-title">System Configuration & Parameters</div>
+            </div>
+            <div style="line-height: 2; font-size: 0.9rem;">
+              <div><strong>Core Decision Engine:</strong> Deterministic Rule Engine V1.0</div>
+              <div><strong>Primary Demand Window:</strong> 16:00 inclusive to 20:00 exclusive</div>
+              <div><strong>Interval Resolution:</strong> 15 minutes (16 intervals per day)</div>
+              <div><strong>Mandatory Completeness Gate:</strong> 90.0%</div>
+              <div><strong>System Mode:</strong> Offline-First, Advisory Only</div>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="logout()" style="margin-top: 20px;">Sign Out</button>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Review Modal Dialog -->
+  <div id="reviewModal" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+      <h3 style="margin-bottom: 12px;" id="modalReviewTitle">Review Recommendation</h3>
+      <div id="modalReviewMeta" style="font-size: 0.85rem; color: #64748b; margin-bottom: 16px;"></div>
+
+      <div class="form-group">
+        <label>Management Action</label>
+        <select id="modalActionSelect" class="form-control">
+          <option value="APPROVE">APPROVE (Accept DSS recommendation)</option>
+          <option value="REJECT">REJECT (Decline recommendation with reason)</option>
+          <option value="MODIFY">MODIFY (Alter recommendation with reason)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Mandatory Justification / Engineering Reason</label>
+        <textarea id="modalReasonText" class="form-control" rows="3" placeholder="Provide operational reason..."></textarea>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button class="btn btn-secondary" onclick="closeReviewModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitModalReview()">Submit Decision</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Review Modal Dialog -->
+  <div id="feedbackReviewModal" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+      <h3 style="margin-bottom: 12px;" id="modalFbTitle">Review Electrician Feedback</h3>
+      <div id="modalFbMeta" style="font-size: 0.85rem; color: #64748b; margin-bottom: 16px;"></div>
+
+      <div class="form-group">
+        <label>Management Action</label>
+        <select id="modalFbActionSelect" class="form-control">
+          <option value="ACCEPT_FEEDBACK">ACCEPT_FEEDBACK (Verify observation into official log)</option>
+          <option value="REJECT">REJECT (Decline feedback with reason)</option>
+          <option value="CLARIFICATION_REQUESTED">CLARIFICATION_REQUESTED (Request more measurements)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Mandatory Engineering Reason / Response to Electrician</label>
+        <textarea id="modalFbReasonText" class="form-control" rows="3" placeholder="Provide operational feedback or instructions..."></textarea>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button class="btn btn-secondary" onclick="closeFeedbackReviewModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitFeedbackReviewModal()">Submit Review</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/js/explanation-panel.js"></script>
+  <script src="/static/js/management.js"></script>
+</body>
+</html>
+

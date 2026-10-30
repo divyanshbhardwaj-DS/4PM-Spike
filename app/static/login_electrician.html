@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electrician Login | DSS-1.0</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <style>
+    body {
+      background-color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .auth-box {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      width: 440px;
+      max-width: 90vw;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .auth-header h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .auth-header p {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    .quick-creds {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      font-size: 0.8rem;
+      color: #1e40af;
+    }
+    .quick-creds button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .error-banner {
+      background: #fef2f2;
+      border: 1px solid #f87171;
+      color: #b91c1c;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-box">
+    <div class="auth-header">
+      <div style="width: 48px; height: 48px; background: #eff6ff; color: #2563eb; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+      </div>
+      <h2>Electrician Sign In</h2>
+      <p>Technical Investigation & Field Feedback Portal</p>
+    </div>
+
+    <div class="quick-creds">
+      <strong>Demo Accounts:</strong><br>
+      &bull; <code>electrician1</code> / <code>sparky2026!</code> (BLD-ENG, BLD-HUM, BLD-DORM)<br>
+      <button type="button" onclick="fillCreds('electrician1', 'sparky2026!')">Fill electrician1</button>
+      <button type="button" onclick="fillCreds('electrician2', 'current2026!')">Fill electrician2</button>
+    </div>
+
+    <div id="errorBanner" class="error-banner"></div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" class="form-control" placeholder="electrician1" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">
+        Sign In to Electrician Dashboard &rarr;
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 24px; font-size: 0.82rem; color: #64748b;">
+      <a href="/" style="color: #64748b; text-decoration: none;">&larr; Back to Public Portal</a> &bull;
+      <a href="/login/management" style="color: #2563eb; text-decoration: none;">Management Login</a>
+    </div>
+  </div>
+
+  <script>
+    function fillCreds(u, p) {
+      document.getElementById("username").value = u;
+      document.getElementById("password").value = p;
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const errBanner = document.getElementById("errorBanner");
+      errBanner.style.display = "none";
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.detail || "Authentication failed.");
+        }
+
+        if (data.role !== "ELECTRICIAN" && data.role !== "ADMIN") {
+          throw new Error("This portal is restricted to Electrician accounts. Use Management login.");
+        }
+
+        localStorage.setItem("dss_token", data.access_token);
+        localStorage.setItem("dss_user", JSON.stringify(data));
+        window.location.href = "/electrician";
+      } catch (err) {
+        errBanner.innerText = err.message;
+        errBanner.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
+
