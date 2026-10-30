@@ -1,6 +1,9 @@
 import pytest
+import secrets
 from fastapi.testclient import TestClient
 from app.main import app
+from app.database import SessionLocal
+from app.models import AuditEvent, Building, User
 
 client = TestClient(app)
 
@@ -141,3 +144,61 @@ def test_13_point_explanation_endpoint():
     for k in required_keys:
         assert k in exp, f"Explanation must contain {k}"
 
+
+def test_admin_can_create_electrician_assigned_to_all_buildings():
+    admin_login = client.post(
+        "/api/auth/login",
+        json={"username": "admin1", "password": "admin2026!"}
+    )
+    assert admin_login.status_code == 200
+    admin_headers = {"Authorization": f"Bearer {admin_login.json()['access_token']}"}
+
+    electrician_login = client.post(
+        "/api/auth/login",
+        json={"username": "electrician1", "password": "sparky2026!"}
+    )
+    assert electrician_login.status_code == 200
+    electrician_headers = {"Authorization": f"Bearer {electrician_login.json()['access_token']}"}
+
+    suffix = secrets.token_hex(4)
+    username = f"elec_{suffix}"
+    email = f"elec_{suffix}@example.com"
+    payload = {
+        "username": username,
+        "email": email,
+        "full_name": "Divyansh",
+        "role": "ELECTRICIAN",
+        "assign_all_buildings": True
+    }
+
+    denied = client.post("/api/auth/users", headers=electrician_headers, json=payload)
+    assert denied.status_code == 403
+
+    try:
+        created = client.post("/api/auth/users", headers=admin_headers, json=payload)
+        assert created.status_code == 201
+        user_data = created.json()
+        assert user_data["username"] == username
+        db = SessionLocal()
+        try:
+            assert len(user_data["assigned_buildings"]) == db.query(Building).count()
+        finally:
+            db.close()
+        assert user_data["initial_password"]
+
+        login = client.post(
+            "/api/auth/login",
+            json={"username": username, "password": user_data["initial_password"]}
+        )
+        assert login.status_code == 200
+        assert login.json()["role"] == "ELECTRICIAN"
+    finally:
+        db = SessionLocal()
+        try:
+            user = db.query(User).filter(User.username == username).first()
+            if user:
+                db.query(AuditEvent).filter(AuditEvent.user_id == user.id).delete(synchronize_session=False)
+                db.delete(user)
+                db.commit()
+        finally:
+            db.close()

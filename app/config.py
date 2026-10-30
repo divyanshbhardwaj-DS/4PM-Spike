@@ -21,7 +21,15 @@ if not SECRET_KEY:
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 12  # 12-hour operational shift
 
-DATABASE_URL = f"sqlite:///{RUNTIME_DIR / 'dss_campus.db'}"
+DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL:
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+    elif DATABASE_URL.startswith("postgresql://"):
+        DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+else:
+    DATABASE_URL = f"sqlite:///{RUNTIME_DIR / 'dss_campus.db'}"
+PERSISTENT_DATABASE = DATABASE_URL.startswith("postgresql+")
 
 # Energy analysis parameters
 PEAK_WINDOW_START_HOUR = 16  # 16:00 inclusive
