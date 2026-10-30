@@ -1,4 +1,5 @@
 import os
+import secrets
 import tempfile
 from pathlib import Path
 
@@ -12,7 +13,11 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
 MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
-SECRET_KEY = os.getenv("DSS_SECRET_KEY", "dss-super-secure-offline-secret-key-2026-hackathon")
+SECRET_KEY = os.getenv("DSS_SECRET_KEY")
+if not SECRET_KEY:
+    if os.getenv("VERCEL"):
+        raise RuntimeError("DSS_SECRET_KEY must be configured in the Vercel environment.")
+    SECRET_KEY = secrets.token_urlsafe(32)
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 12  # 12-hour operational shift
 

@@ -32,28 +32,8 @@
     }
     .auth-header p {
       font-size: 0.85rem;
-      color: #64748b;
+      color: #475569;
       margin-top: 4px;
-    }
-    .quick-creds {
-      background: #ecfdf5;
-      border: 1px solid #a7f3d0;
-      border-radius: 6px;
-      padding: 10px 14px;
-      margin-bottom: 20px;
-      font-size: 0.8rem;
-      color: #065f46;
-    }
-    .quick-creds button {
-      background: #059669;
-      color: white;
-      border: none;
-      padding: 3px 8px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin-top: 6px;
     }
     .error-banner {
       background: #fef2f2;
@@ -67,7 +47,7 @@
     }
   </style>
 </head>
-<body>
+<body data-portal-role="MANAGEMENT">
 
   <div class="auth-box">
     <div class="auth-header">
@@ -76,13 +56,6 @@
       </div>
       <h2>Managing Team Sign In</h2>
       <p>Campus Operations & Energy Decision Authority</p>
-    </div>
-
-    <div class="quick-creds">
-      <strong>Demo Accounts:</strong><br>
-      &bull; <code>manager1</code> / <code>director2026!</code> (Director of Campus Energy)<br>
-      <button type="button" onclick="fillCreds('manager1', 'director2026!')">Fill manager1</button>
-      <button type="button" onclick="fillCreds('admin1', 'admin2026!')">Fill admin1</button>
     </div>
 
     <div id="errorBanner" class="error-banner"></div>
@@ -103,50 +76,12 @@
       </button>
     </form>
 
-    <div style="text-align: center; margin-top: 24px; font-size: 0.82rem; color: #64748b;">
-      <a href="/" style="color: #64748b; text-decoration: none;">&larr; Back to Public Portal</a> &bull;
+    <div style="text-align: center; margin-top: 24px; font-size: 0.82rem; color: #475569;">
+      <a href="/" style="color: #475569; text-decoration: none;">&larr; Back to Public Portal</a> &bull;
       <a href="/login/electrician" style="color: #059669; text-decoration: none;">Electrician Login</a>
     </div>
   </div>
 
-  <script>
-    function fillCreds(u, p) {
-      document.getElementById("username").value = u;
-      document.getElementById("password").value = p;
-    }
-
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const errBanner = document.getElementById("errorBanner");
-      errBanner.style.display = "none";
-
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value;
-
-      try {
-        const res = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password })
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.detail || "Authentication failed.");
-        }
-
-        if (data.role !== "MANAGEMENT" && data.role !== "ADMIN") {
-          throw new Error("This portal is restricted to Management & Admin accounts. Use Electrician login.");
-        }
-
-        localStorage.setItem("dss_token", data.access_token);
-        localStorage.setItem("dss_user", JSON.stringify(data));
-        window.location.href = "/management";
-      } catch (err) {
-        errBanner.innerText = err.message;
-        errBanner.style.display = "block";
-      }
-    });
-  </script>
+  <script src="/static/js/login.js"></script>
 </body>
 </html>
-

@@ -92,19 +92,19 @@ async function loadBuildings() {
       <td>${b.is_protected ? '<span class="badge badge-protected">PROTECTED</span>' : 'Standard'}</td>
       <td>
         <span class="badge badge-evi-${b.evidence_grade.toLowerCase()}">${b.evidence_grade}</span>
-        <button class="btn-why" onclick="window.dssExplanationPanel.loadMetricExplanation('EVIDENCE_GRADE', '${b.evidence_grade}', ${b.id})">Why?</button>
+        <button class="btn-why" ${dssAction("metric-explanation", "EVIDENCE_GRADE", b.evidence_grade, b.id)}>Why?</button>
       </td>
       <td>
         <span class="badge badge-sev-${b.severity.toLowerCase()}">${b.severity}</span>
-        <button class="btn-why" onclick="window.dssExplanationPanel.loadMetricExplanation('SEVERITY', '${b.severity}', ${b.id})">Why?</button>
+        <button class="btn-why" ${dssAction("metric-explanation", "SEVERITY", b.severity, b.id)}>Why?</button>
       </td>
       <td>
         <span class="badge badge-elig-${b.eligibility.toLowerCase().replace('_', '-')}">${b.eligibility}</span>
-        <button class="btn-why" onclick="window.dssExplanationPanel.loadMetricExplanation('ELIGIBILITY', '${b.eligibility}', ${b.id})">Why?</button>
+        <button class="btn-why" ${dssAction("metric-explanation", "ELIGIBILITY", b.eligibility, b.id)}>Why?</button>
       </td>
       <td><strong>${b.open_investigation_count}</strong></td>
       <td>
-        <button class="btn btn-sm btn-primary" onclick="inspectBuilding(${b.id})">Inspect</button>
+        <button class="btn btn-sm btn-primary" ${dssAction("inspect-building", b.id)}>Inspect</button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -145,7 +145,7 @@ async function loadTasks() {
       <td>${t.required_inspection}</td>
       <td><span class="badge badge-elig-pending">${t.status}</span></td>
       <td>
-        <button class="btn btn-sm btn-primary" onclick="quickUpdateTask(${t.id}, '${nextAction}')">${btnText}</button>
+        <button class="btn btn-sm btn-primary" ${dssAction("quick-update-task", t.id, nextAction)}>${btnText}</button>
       </td>
     `;
     tbOverview.appendChild(tr);
@@ -165,7 +165,7 @@ async function loadTasks() {
       <td>${t.instructions || "Standard SOP inspection"}</td>
       <td><span class="badge badge-elig-pending">${t.status}</span></td>
       <td>
-        <select class="form-control" style="font-size: 0.78rem;" onchange="updateTaskStatus(${t.id}, this.value)">
+        <select class="form-control" style="font-size: 0.78rem;" ${dssChangeAction("update-task-status", t.id)}>
           <option value="ASSIGNED" ${t.status === 'ASSIGNED' ? 'selected' : ''}>ASSIGNED</option>
           <option value="IN_PROGRESS" ${t.status === 'IN_PROGRESS' ? 'selected' : ''}>IN_PROGRESS</option>
           <option value="NEEDS_INFORMATION" ${t.status === 'NEEDS_INFORMATION' ? 'selected' : ''}>NEEDS_INFO</option>
@@ -210,7 +210,7 @@ function inspectBuilding(bId) {
 async function loadBoundaries() {
   const container = document.getElementById("boundaryCardsContainer");
   if (!container) return;
-  container.innerHTML = `<div style="text-align:center; padding:20px; color:#64748b;">Loading boundary analyses...</div>`;
+  container.innerHTML = `<div style="text-align:center; padding:20px; color:#475569;">Loading boundary analyses...</div>`;
   const token = localStorage.getItem("dss_token");
 
   let html = "";
@@ -233,15 +233,15 @@ async function loadBoundaries() {
             </div>
           </div>
           <p style="font-size:0.88rem; color:#334155; margin-bottom:10px; line-height:1.5;">${ba.explanation}</p>
-          <div style="font-size:0.8rem; color:#64748b; background:#f8fafc; padding:10px; border-radius:6px; margin-bottom:12px;">
+          <div style="font-size:0.8rem; color:#475569; background:#f8fafc; padding:10px; border-radius:6px; margin-bottom:12px;">
             <strong>Can Reconstruct Gross Demand:</strong> ${ba.can_reconstruct_gross ? '<span style="color:#059669; font-weight:700;">YES (Supported)</span>' : '<span style="color:#dc2626; font-weight:700;">NO (Unresolved or missing solar)</span>'}<br>
             <strong>Solar Generation Available:</strong> ${ba.has_solar ? 'Yes (' + (ba.solar_aligned ? 'Synchronized 15-min intervals' : 'Misaligned timestamps') + ')' : 'None'}
           </div>
           <div style="display:flex; gap:8px;">
-            <button class="btn btn-sm btn-secondary" onclick="window.dssExplanationPanel.loadMetricExplanation('DECISION_CODE', 'RESOLVE_BOUNDARY', ${b.id})">
+            <button class="btn btn-sm btn-secondary" ${dssAction("metric-explanation", "DECISION_CODE", "RESOLVE_BOUNDARY", b.id)}>
               Why Boundary Status?
             </button>
-            <button class="btn btn-sm btn-primary" onclick="openFeedbackForDecision(null, ${b.id}, 'METER_BOUNDARY')">
+            <button class="btn btn-sm btn-primary" ${dssAction("open-feedback", null, b.id, "METER_BOUNDARY")}>
               Submit Boundary Correction
             </button>
           </div>
@@ -251,7 +251,7 @@ async function loadBoundaries() {
       console.error(e);
     }
   }
-  container.innerHTML = html || `<div style="text-align:center; padding:20px; color:#64748b;">No assigned buildings found.</div>`;
+  container.innerHTML = html || `<div style="text-align:center; padding:20px; color:#475569;">No assigned buildings found.</div>`;
 }
 
 async function renderReadingsChart() {
@@ -362,7 +362,7 @@ async function loadDataQuality() {
         <td>${d.short_explanation}</td>
         <td>${d.recommended_action}</td>
         <td>
-          <button class="btn-why" onclick="window.dssExplanationPanel.loadDecisionExplanation(${d.id})">Why?</button>
+          <button class="btn-why" ${dssAction("decision-explanation", d.id)}>Why?</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -391,7 +391,7 @@ async function loadDSSDecisions() {
     card.className = `decision-card ${d.severity.toLowerCase()}`;
     card.innerHTML = `
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-        <span style="font-size: 0.82rem; font-weight: 700; color: #64748b;">${d.building_name} &bull; ${d.meter_code}</span>
+        <span style="font-size: 0.82rem; font-weight: 700; color: #475569;">${d.building_name} &bull; ${d.meter_code}</span>
         <div>
           <span class="badge badge-sev-${d.severity.toLowerCase()}">${d.severity}</span>
           <span class="badge badge-evi-${d.evidence_grade.toLowerCase()}">${d.evidence_grade}</span>
@@ -401,11 +401,11 @@ async function loadDSSDecisions() {
       <h4 style="font-size: 1.05rem; color: #0f172a; margin-bottom: 6px;">${d.decision_code}: ${d.recommended_action}</h4>
       <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px;">${d.short_explanation}</p>
       <div style="display: flex; gap: 8px;">
-        <button class="btn btn-sm btn-secondary" onclick="window.dssExplanationPanel.loadDecisionExplanation(${d.id})">
+        <button class="btn btn-sm btn-secondary" ${dssAction("decision-explanation", d.id)}>
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           Why this result? (13-Point Panel)
         </button>
-        <button class="btn btn-sm btn-primary" onclick="openFeedbackForDecision(${d.id}, ${d.building_id}, '${d.decision_code}')">
+        <button class="btn btn-sm btn-primary" ${dssAction("open-feedback", d.id, d.building_id, d.decision_code)}>
           Submit Technical Feedback
         </button>
       </div>
@@ -423,7 +423,7 @@ async function loadDSSDecisions() {
       <div>
         <strong>${d.building_name}</strong> &ndash; <code>${d.decision_code}</code> (${d.severity})
       </div>
-      <button class="btn btn-sm btn-secondary" onclick="window.dssExplanationPanel.loadDecisionExplanation(${d.id})">Open Explanation</button>
+      <button class="btn btn-sm btn-secondary" ${dssAction("decision-explanation", d.id)}>Open Explanation</button>
     `;
     expContainer.appendChild(expItem);
   });
@@ -501,3 +501,10 @@ function logout() {
   window.location.href = "/login/electrician";
 }
 
+registerDssAction("logout", logout);
+registerDssAction("metric-explanation", (...args) => window.dssExplanationPanel.loadMetricExplanation(...args));
+registerDssAction("decision-explanation", decisionId => window.dssExplanationPanel.loadDecisionExplanation(decisionId));
+registerDssAction("inspect-building", inspectBuilding);
+registerDssAction("quick-update-task", quickUpdateTask);
+registerDssAction("update-task-status", (taskId, select) => updateTaskStatus(taskId, select.value));
+registerDssAction("open-feedback", openFeedbackForDecision);

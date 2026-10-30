@@ -23,7 +23,7 @@ class ExplanationPanel {
         <button class="panel-close-btn" id="expPanelClose">&times;</button>
       </div>
       <div class="panel-body" id="expPanelBody">
-        <div style="text-align: center; padding: 40px; color: #64748b;">Loading explanation...</div>
+        <div style="text-align: center; padding: 40px; color: #475569;">Loading explanation...</div>
       </div>
     `;
 
@@ -52,7 +52,7 @@ class ExplanationPanel {
 
   async loadDecisionExplanation(decisionId) {
     this.open();
-    this.body.innerHTML = `<div style="text-align: center; padding: 40px; color: #64748b;">Fetching deterministic explanation...</div>`;
+    this.body.innerHTML = `<div style="text-align: center; padding: 40px; color: #475569;">Fetching deterministic explanation...</div>`;
 
     try {
       const token = localStorage.getItem("dss_token");
@@ -69,7 +69,7 @@ class ExplanationPanel {
 
   async loadMetricExplanation(metricType, value, buildingId) {
     this.open();
-    this.body.innerHTML = `<div style="text-align: center; padding: 40px; color: #64748b;">Analyzing rule provenance...</div>`;
+    this.body.innerHTML = `<div style="text-align: center; padding: 40px; color: #475569;">Analyzing rule provenance...</div>`;
 
     try {
       const token = localStorage.getItem("dss_token");
@@ -89,7 +89,7 @@ class ExplanationPanel {
 
   render13Points(exp, meta) {
     if (!exp) {
-      this.body.innerHTML = `<div style="padding: 20px; color: #64748b;">Explanation unavailable — insufficient supporting information.</div>`;
+      this.body.innerHTML = `<div style="padding: 20px; color: #475569;">Explanation unavailable — insufficient supporting information.</div>`;
       return;
     }
 
@@ -111,7 +111,7 @@ class ExplanationPanel {
 
     let html = `
       <div style="background-color: #f1f5f9; padding: 12px; border-radius: 6px; margin-bottom: 20px; border-left: 4px solid #2563eb;">
-        <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #64748b;">Context</div>
+        <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #475569;">Context</div>
         <div style="font-size: 0.95rem; font-weight: 700; color: #0f172a;">${meta.building_name || "Campus Meter Analysis"}</div>
       </div>
     `;

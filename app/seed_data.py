@@ -1,4 +1,5 @@
 import datetime
+import os
 from sqlalchemy.orm import Session
 from app.auth import hash_password
 from app.models import (
@@ -8,6 +9,14 @@ from app.models import (
 )
 from app.engines.dss_engine import run_dss_deterministic_pipeline
 from app.models import DSSDecision, DecisionExplanation, Recommendation, DataQualityFinding
+
+def _seed_password(variable: str, local_default: str) -> str:
+    password = os.getenv(variable)
+    if password:
+        return password
+    if os.getenv("VERCEL"):
+        raise RuntimeError(f"{variable} must be configured as a sensitive Vercel environment variable.")
+    return local_default
 
 def seed_database(db: Session):
     """
@@ -21,7 +30,7 @@ def seed_database(db: Session):
             email="electrician1@campus.edu",
             full_name="Marcus Vance, Master Electrician",
             role="ELECTRICIAN",
-            hashed_password=hash_password("sparky2026!"),
+            hashed_password=hash_password(_seed_password("DSS_ELECTRICIAN1_PASSWORD", "sparky2026!")),
             is_active=True
         )
         elec2 = User(
@@ -29,7 +38,7 @@ def seed_database(db: Session):
             email="electrician2@campus.edu",
             full_name="Elena Rostova, High Voltage Specialist",
             role="ELECTRICIAN",
-            hashed_password=hash_password("current2026!"),
+            hashed_password=hash_password(_seed_password("DSS_ELECTRICIAN2_PASSWORD", "current2026!")),
             is_active=True
         )
         mgr = User(
@@ -37,7 +46,7 @@ def seed_database(db: Session):
             email="manager1@campus.edu",
             full_name="Dr. Sarah Chen, Director of Campus Energy Operations",
             role="MANAGEMENT",
-            hashed_password=hash_password("director2026!"),
+            hashed_password=hash_password(_seed_password("DSS_MANAGER_PASSWORD", "director2026!")),
             is_active=True
         )
         admin = User(
@@ -45,7 +54,7 @@ def seed_database(db: Session):
             email="admin1@campus.edu",
             full_name="James Thorne, Campus Infrastructure Admin",
             role="ADMIN",
-            hashed_password=hash_password("admin2026!"),
+            hashed_password=hash_password(_seed_password("DSS_ADMIN_PASSWORD", "admin2026!")),
             is_active=True
         )
         db.add_all([elec1, elec2, mgr, admin])
@@ -421,4 +430,3 @@ def seed_database(db: Session):
         )
         db.add(audit)
         db.commit()
-

@@ -93,3 +93,10 @@ def health_check():
         "rule_version": "DSS-CORE-V1.0"
     }
 
+@app.get("/robots.txt", include_in_schema=False)
+def robots_txt():
+    return FileResponse(STATIC_DIR / "robots.txt", media_type="text/plain")
+
+@app.get("/sitemap.xml", include_in_schema=False)
+def sitemap_xml():
+    return FileResponse(STATIC_DIR / "sitemap.xml", media_type="application/xml")

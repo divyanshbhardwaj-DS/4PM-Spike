@@ -78,7 +78,7 @@
             <div id="sidebarUserName" style="font-weight: 700;">Marcus Vance</div>
             <div style="font-size: 0.72rem; color: #94a3b8;">Master Electrician</div>
           </div>
-          <button class="btn btn-sm btn-secondary" onclick="logout()" title="Sign Out">Logout</button>
+          <button class="btn btn-sm btn-secondary" data-dss-action="logout" title="Sign Out">Logout</button>
         </div>
       </div>
     </aside>
@@ -93,7 +93,7 @@
             Deterministic Core Active
           </span>
         </div>
-        <div style="font-size: 0.8rem; color: #64748b;">
+        <div style="font-size: 0.8rem; color: #475569;">
           Demand Window: <strong>16:00 &ndash; 20:00</strong> (15-min intervals)
         </div>
       </header>
@@ -142,7 +142,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td colspan="7" style="text-align: center; color: #64748b;">Loading tasks...</td></tr>
+                  <tr><td colspan="7" style="text-align: center; color: #475569;">Loading tasks...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -171,7 +171,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td colspan="9" style="text-align: center; color: #64748b;">Loading assigned buildings...</td></tr>
+                  <tr><td colspan="9" style="text-align: center; color: #475569;">Loading assigned buildings...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -199,7 +199,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td colspan="8" style="text-align: center; color: #64748b;">Loading tasks...</td></tr>
+                  <tr><td colspan="8" style="text-align: center; color: #475569;">Loading tasks...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -236,7 +236,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td colspan="5" style="text-align: center; color: #64748b;">Select building to view intervals...</td></tr>
+                  <tr><td colspan="5" style="text-align: center; color: #475569;">Select building to view intervals...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -273,7 +273,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td colspan="7" style="text-align: center; color: #64748b;">Loading data quality records...</td></tr>
+                  <tr><td colspan="7" style="text-align: center; color: #475569;">Loading data quality records...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -296,7 +296,7 @@
             <div class="card-header">
               <div class="card-title">Universal Decision Explanation Explorer</div>
             </div>
-            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 16px;">
+            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 16px;">
               Click any badge or decision card across the application to inspect the complete 13-point deterministic explanation, or select a building below:
             </p>
             <div id="explanationsListContainer"></div>
@@ -374,7 +374,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td colspan="6" style="text-align: center; color: #64748b;">Loading feedback history...</td></tr>
+                  <tr><td colspan="6" style="text-align: center; color: #475569;">Loading feedback history...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -411,7 +411,7 @@
               <div><strong>Assigned Jurisdiction:</strong> <span id="profAssigned">Loading...</span></div>
               <div><strong>Session Expiry:</strong> 12 hours (Standard Operational Shift)</div>
             </div>
-            <button class="btn btn-danger btn-sm" onclick="logout()" style="margin-top: 20px;">Sign Out</button>
+            <button class="btn btn-danger btn-sm" data-dss-action="logout" style="margin-top: 20px;">Sign Out</button>
           </div>
         </section>
       </div>
@@ -419,8 +419,8 @@
   </div>
 
   <!-- Scripts -->
+  <script src="/static/js/actions.js"></script>
   <script src="/static/js/explanation-panel.js"></script>
   <script src="/static/js/electrician.js"></script>
 </body>
 </html>
-

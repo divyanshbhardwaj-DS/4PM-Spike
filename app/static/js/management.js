@@ -126,11 +126,11 @@ async function loadBuildingsAndRankings() {
       <td><span class=\"badge badge-sev-info\">${b.boundary_type}</span></td>
       <td>
         <span class=\"badge badge-evi-${b.evidence_grade.toLowerCase()}\">${b.evidence_grade}</span>
-        <button class=\"btn-why\" onclick=\"window.dssExplanationPanel.loadMetricExplanation('EVIDENCE_GRADE', '${b.evidence_grade}', ${b.building_id})\">Why?</button>
+        <button class=\"btn-why\" ${dssAction("metric-explanation", "EVIDENCE_GRADE", b.evidence_grade, b.building_id)}>Why?</button>
       </td>
       <td>
         <span class=\"badge badge-sev-${b.severity.toLowerCase()}\">${b.severity}</span>
-        <button class=\"btn-why\" onclick=\"window.dssExplanationPanel.loadMetricExplanation('SEVERITY', '${b.severity}', ${b.building_id})\">Why?</button>
+        <button class=\"btn-why\" ${dssAction("metric-explanation", "SEVERITY", b.severity, b.building_id)}>Why?</button>
       </td>
       <td><code>${b.decision_code}</code></td>
     `;
@@ -174,13 +174,13 @@ async function loadBuildingsAndRankings() {
       <td><strong>${b.building_code}</strong></td>
       <td>${b.building_name}</td>
       <td>${b.category}</td>
-      <td>${b.is_protected ? '<span class=\"badge badge-protected\">PROTECTED ASSET</span>' : '<span style=\"color:#64748b;\">Standard Commercial</span>'}</td>
+      <td>${b.is_protected ? '<span class=\"badge badge-protected\">PROTECTED ASSET</span>' : '<span style=\"color:#475569;\">Standard Commercial</span>'}</td>
       <td><code>MTR-${b.building_code.replace('BLD-', '')}-01</code></td>
       <td><span class=\"badge badge-evi-${b.evidence_grade.toLowerCase()}\">${b.evidence_grade}</span></td>
       <td><span class=\"badge badge-sev-${b.severity.toLowerCase()}\">${b.severity}</span></td>
       <td><span class=\"badge badge-elig-${b.eligibility.toLowerCase().replace('_', '-')}\">${b.eligibility}</span></td>
       <td>
-        <button class=\"btn-why\" onclick=\"window.dssExplanationPanel.loadMetricExplanation('ELIGIBILITY', '${b.eligibility}', ${b.building_id})\">Explain Eligibility</button>
+        <button class=\"btn-why\" ${dssAction("metric-explanation", "ELIGIBILITY", b.eligibility, b.building_id)}>Explain Eligibility</button>
       </td>
     `;
     tbExp.appendChild(tr);
@@ -200,7 +200,7 @@ async function loadBuildingsAndRankings() {
 async function loadMeterSolarAnalysis() {
   const container = document.getElementById("meterSolarDetails");
   if (!container) return;
-  container.innerHTML = `<div style="text-align:center; padding:20px; color:#64748b;">Loading meter boundary topology...</div>`;
+  container.innerHTML = `<div style="text-align:center; padding:20px; color:#475569;">Loading meter boundary topology...</div>`;
   const token = localStorage.getItem("dss_token");
 
   let html = "";
@@ -223,12 +223,12 @@ async function loadMeterSolarAnalysis() {
             </div>
           </div>
           <p style="font-size:0.88rem; color:#334155; margin-bottom:10px; line-height:1.5;">${ba.explanation}</p>
-          <div style="font-size:0.8rem; color:#64748b; background:#f8fafc; padding:10px; border-radius:6px; margin-bottom:12px;">
+          <div style="font-size:0.8rem; color:#475569; background:#f8fafc; padding:10px; border-radius:6px; margin-bottom:12px;">
             <strong>Can Reconstruct Gross Demand:</strong> ${ba.can_reconstruct_gross ? '<span style="color:#059669; font-weight:700;">YES (Supported)</span>' : '<span style="color:#dc2626; font-weight:700;">NO (Unresolved or missing solar)</span>'}<br>
             <strong>Solar Generation Available:</strong> ${ba.has_solar ? 'Yes (' + (ba.solar_aligned ? 'Synchronized 15-min intervals' : 'Misaligned timestamps') + ')' : 'None'}
           </div>
           <div style="display:flex; gap:8px;">
-            <button class="btn btn-sm btn-secondary" onclick="window.dssExplanationPanel.loadMetricExplanation('DECISION_CODE', 'RESOLVE_BOUNDARY', ${b.building_id})">
+            <button class="btn btn-sm btn-secondary" ${dssAction("metric-explanation", "DECISION_CODE", "RESOLVE_BOUNDARY", b.building_id)}>
               Why Boundary Status?
             </button>
           </div>
@@ -238,7 +238,7 @@ async function loadMeterSolarAnalysis() {
       html += `<div style="padding:12px; color:#dc2626;">Failed to load metrics for ${b.building_name}.</div>`;
     }
   }
-  container.innerHTML = html || `<div style="text-align:center; padding:20px; color:#64748b;">No buildings available.</div>`;
+  container.innerHTML = html || `<div style="text-align:center; padding:20px; color:#475569;">No buildings available.</div>`;
 }
 
 // =============================================
@@ -275,7 +275,7 @@ async function loadEvidenceAssessment() {
         <div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:16px; text-align:center; border-top:4px solid ${gradeDescriptions[grade].color};">
           <div style="font-size:2rem; font-weight:700; color:${gradeDescriptions[grade].color};">${count}</div>
           <div style="font-size:0.85rem; font-weight:600; color:#0f172a;">${grade}</div>
-          <div style="font-size:0.75rem; color:#64748b;">buildings</div>
+          <div style="font-size:0.75rem; color:#475569;">buildings</div>
         </div>
       `).join("")}
     </div>
@@ -287,7 +287,7 @@ async function loadEvidenceAssessment() {
       <div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:16px; margin-bottom:12px; border-left:4px solid ${info.color};">
         <h4 style="color:${info.color}; margin-bottom:6px;">${info.label}</h4>
         <p style="font-size:0.85rem; color:#475569; margin-bottom:10px;">${info.desc}</p>
-        <div style="font-size:0.8rem; color:#64748b;">
+        <div style="font-size:0.8rem; color:#475569;">
           <strong>Buildings at this grade:</strong>
           ${decisions.filter(d => d.evidence_grade === grade).map(d => d.building_name).join(", ") || "None"}
         </div>
@@ -348,7 +348,7 @@ async function loadDecisions() {
     card.className = `decision-card ${d.severity.toLowerCase()}`;
     card.innerHTML = `
       <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <span style="font-weight: 700; color: #64748b;">${d.building_name} &bull; ${d.meter_code}</span>
+        <span style="font-weight: 700; color: #475569;">${d.building_name} &bull; ${d.meter_code}</span>
         <div>
           <span class="badge badge-sev-${d.severity.toLowerCase()}">${d.severity}</span>
           <span class="badge badge-evi-${d.evidence_grade.toLowerCase()}">${d.evidence_grade}</span>
@@ -359,8 +359,8 @@ async function loadDecisions() {
       <h4 style="margin-bottom: 6px; font-size: 1.05rem;">${d.decision_code}: ${d.recommended_action}</h4>
       <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px;">${d.short_explanation}</p>
       <div style="display: flex; gap: 8px;">
-        <button class="btn btn-sm btn-secondary" onclick="window.dssExplanationPanel.loadDecisionExplanation(${d.id})">Why this result? (13-Point Panel)</button>
-        <button class="btn btn-sm btn-primary" onclick="openReviewModal(${d.id}, '${d.building_name}', '${d.decision_code}', 'APPROVE')">Review Recommendation</button>
+        <button class="btn btn-sm btn-secondary" ${dssAction("decision-explanation", d.id)}>Why this result? (13-Point Panel)</button>
+        <button class="btn btn-sm btn-primary" ${dssAction("open-review-modal", d.id, d.building_name, d.decision_code, "APPROVE")}>Review Recommendation</button>
       </div>
     `;
     container.appendChild(card);
@@ -377,11 +377,11 @@ async function loadDecisions() {
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
             <strong>${d.building_name}</strong> &ndash; <code>${d.decision_code}</code>
-            <div style="font-size:0.85rem; color:#64748b; margin-top:4px;">${d.recommended_action}</div>
+            <div style="font-size:0.85rem; color:#475569; margin-top:4px;">${d.recommended_action}</div>
           </div>
           <div style="display:flex; gap:6px;">
-            <button class="btn btn-sm btn-success" onclick="quickReviewDecision(${d.id}, 'APPROVE')">Approve</button>
-            <button class="btn btn-sm btn-danger" onclick="openReviewModal(${d.id}, '${d.building_name}', '${d.decision_code}', 'REJECT')">Reject / Modify</button>
+            <button class="btn btn-sm btn-success" ${dssAction("quick-review-decision", d.id, "APPROVE")}>Approve</button>
+            <button class="btn btn-sm btn-danger" ${dssAction("open-review-modal", d.id, d.building_name, d.decision_code, "REJECT")}>Reject / Modify</button>
           </div>
         </div>
       `;
@@ -397,7 +397,7 @@ async function loadDecisions() {
       <td><span class=\"badge badge-evi-${d.evidence_grade.toLowerCase()}\">${d.evidence_grade}</span></td>
       <td><span class=\"badge badge-sev-${d.severity.toLowerCase()}\">${d.severity}</span></td>
       <td><span class=\"badge badge-sev-info\">${d.status}</span></td>
-      <td><button class=\"btn-why\" onclick=\"window.dssExplanationPanel.loadDecisionExplanation(${d.id})\">Why?</button></td>
+      <td><button class=\"btn-why\" ${dssAction("decision-explanation", d.id)}>Why?</button></td>
     `;
     historyTbody.appendChild(tr);
 
@@ -526,8 +526,8 @@ async function loadElectricianFeedback() {
       <td><span class=\"badge badge-elig-${f.status.toLowerCase().replace('_', '-')}\">${f.status}</span></td>
       <td>
         ${f.status === 'PENDING_REVIEW' ? `
-          <button class=\"btn btn-sm btn-primary\" onclick=\"openFeedbackReviewModal(${f.id}, 'Building #${f.building_id}', '${f.feedback_category}', '${f.technical_observation.replace(/'/g, "\\'").substring(0, 80)}')\">Review</button>
-        ` : '<span style=\"color:#64748b;\">Closed</span>'}
+          <button class=\"btn btn-sm btn-primary\" ${dssAction("open-feedback-review-modal", f.id, "Building #" + f.building_id, f.feedback_category, f.technical_observation.substring(0, 80))}>Review</button>
+        ` : '<span style=\"color:#475569;\">Closed</span>'}
       </td>
     `;
     tbody.appendChild(tr);
@@ -603,12 +603,12 @@ async function loadTasks() {
       <td><span class=\"badge badge-elig-pending\">${t.status}</span></td>
       <td>
         ${t.status === 'COMPLETED' ? `
-          <button class="btn btn-sm btn-secondary" onclick="manageTaskAction(${t.id}, 'REOPENED')">Reopen</button>
+          <button class="btn btn-sm btn-secondary" ${dssAction("manage-task", t.id, "REOPENED")}>Reopen</button>
         ` : t.status === 'SUBMITTED_FOR_REVIEW' ? `
-          <button class="btn btn-sm btn-success" onclick="manageTaskAction(${t.id}, 'COMPLETED')">Mark Complete</button>
-          <button class="btn btn-sm btn-secondary" onclick="manageTaskAction(${t.id}, 'REOPENED')">Reopen</button>
+          <button class="btn btn-sm btn-success" ${dssAction("manage-task", t.id, "COMPLETED")}>Mark Complete</button>
+          <button class="btn btn-sm btn-secondary" ${dssAction("manage-task", t.id, "REOPENED")}>Reopen</button>
         ` : `
-          <span style="font-size:0.78rem; color:#64748b;">Awaiting field action</span>
+          <span style="font-size:0.78rem; color:#475569;">Awaiting field action</span>
         `}
       </td>
     `;
@@ -895,12 +895,12 @@ async function loadDatasetVersions() {
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
             <strong>${d.name} &bull; Version #${v.version_num}</strong>
-            <div style="font-size:0.8rem; color:#64748b;">Source: ${v.source} &bull; ${v.record_count} records &bull; Provenance: ${v.provenance_type}</div>
+            <div style="font-size:0.8rem; color:#475569;">Source: ${v.source} &bull; ${v.record_count} records &bull; Provenance: ${v.provenance_type}</div>
           </div>
           <div style="display:flex; gap:6px;">
-            <button class="btn btn-sm btn-secondary" onclick="downloadDatasetExport(${v.id}, 'CSV')">CSV</button>
-            <button class="btn btn-sm btn-secondary" onclick="downloadDatasetExport(${v.id}, 'XLSX')">XLSX</button>
-            <button class="btn btn-sm btn-primary" onclick="downloadDatasetExport(${v.id}, 'ZIP')">ZIP Bundle &darr;</button>
+            <button class="btn btn-sm btn-secondary" ${dssAction("download-dataset", v.id, "CSV")}>CSV</button>
+            <button class="btn btn-sm btn-secondary" ${dssAction("download-dataset", v.id, "XLSX")}>XLSX</button>
+            <button class="btn btn-sm btn-primary" ${dssAction("download-dataset", v.id, "ZIP")}>ZIP Bundle &darr;</button>
           </div>
         </div>
       `;
@@ -937,7 +937,7 @@ async function checkMLSuitability() {
   box.innerHTML = `
     <h4>Statistical Suitability Assessment: ${s.is_suitable ? '<span style="color:#059669;">SUITABLE</span>' : '<span style="color:#dc2626;">INSUFFICIENT</span>'}</h4>
     <p style="font-size:0.85rem; margin:8px 0;">${s.reason}</p>
-    <div style="font-size:0.8rem; color:#64748b;">
+    <div style="font-size:0.8rem; color:#475569;">
       Total Records: ${s.record_count} &bull; Valid Intervals: ${s.valid_count} &bull; Completeness: ${s.completeness_pct}% &bull; Span: ${s.date_span_days} days
     </div>
   `;
@@ -1012,15 +1012,15 @@ async function loadModelRegistry() {
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
             <strong>${m.name} &bull; v${v.version_num}</strong> (${v.model_type})
-            <div style="font-size:0.8rem; color:#64748b;">
+            <div style="font-size:0.8rem; color:#475569;">
               Training Period: ${v.training_period.substring(0, 10)} &bull; MAE: ${v.metrics.mae} kW &bull; Status: <span class="badge badge-sev-info">${v.status}</span>
             </div>
           </div>
           <div style="display:flex; gap:6px;">
             ${v.status !== 'ACTIVE' ? `
-              <button class="btn btn-sm btn-success" onclick="updateModelStatus(${v.id}, 'ACTIVATE')">Activate</button>
+              <button class="btn btn-sm btn-success" ${dssAction("update-model-status", v.id, "ACTIVATE")}>Activate</button>
             ` : '<span class="badge badge-elig-eligible">ACTIVE MODEL</span>'}
-            <button class="btn btn-sm btn-secondary" onclick="updateModelStatus(${v.id}, 'ROLLBACK')">Rollback</button>
+            <button class="btn btn-sm btn-secondary" ${dssAction("update-model-status", v.id, "ROLLBACK")}>Rollback</button>
           </div>
         </div>
       `;
@@ -1029,7 +1029,7 @@ async function loadModelRegistry() {
   });
 
   if (container.children.length === 0) {
-    container.innerHTML = `<div style="padding: 20px; text-align: center; color: #64748b;">No candidate ML models registered yet. Click 'Train Time-Aware Forecast Model' to initiate.</div>`;
+    container.innerHTML = `<div style="padding: 20px; text-align: center; color: #475569;">No candidate ML models registered yet. Click 'Train Time-Aware Forecast Model' to initiate.</div>`;
   }
 }
 
@@ -1138,3 +1138,22 @@ function logout() {
   localStorage.removeItem("dss_user");
   window.location.href = "/login/management";
 }
+
+registerDssAction("logout", logout);
+registerDssAction("metric-explanation", (...args) => window.dssExplanationPanel.loadMetricExplanation(...args));
+registerDssAction("decision-explanation", decisionId => window.dssExplanationPanel.loadDecisionExplanation(decisionId));
+registerDssAction("open-review-modal", openReviewModal);
+registerDssAction("quick-review-decision", quickReviewDecision);
+registerDssAction("open-feedback-review-modal", openFeedbackReviewModal);
+registerDssAction("manage-task", manageTaskAction);
+registerDssAction("download-dataset", downloadDatasetExport);
+registerDssAction("update-model-status", updateModelStatus);
+registerDssAction("download-audit", downloadAuditExport);
+registerDssAction("preview-dataset", previewDatasetFile);
+registerDssAction("check-ml-suitability", checkMLSuitability);
+registerDssAction("train-ml-model", trainMLModel);
+registerDssAction("download-report", downloadReport);
+registerDssAction("close-review-modal", closeReviewModal);
+registerDssAction("submit-review", submitModalReview);
+registerDssAction("close-feedback-modal", closeFeedbackReviewModal);
+registerDssAction("submit-feedback-review", submitFeedbackReviewModal);

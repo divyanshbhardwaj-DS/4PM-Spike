@@ -54,7 +54,7 @@
             <div id="mSidebarUserName" style="font-weight: 700;">Dr. Sarah Chen</div>
             <div style="font-size: 0.72rem; color: #94a3b8;">Energy Operations Director</div>
           </div>
-          <button class="btn btn-sm btn-secondary" onclick="logout()" title="Sign Out">Logout</button>
+          <button class="btn btn-sm btn-secondary" data-dss-action="logout" title="Sign Out">Logout</button>
         </div>
       </div>
     </aside>
@@ -69,7 +69,7 @@
             Advisory Decision Support Engine (Offline)
           </span>
         </div>
-        <div style="font-size: 0.8rem; color: #64748b;">
+        <div style="font-size: 0.8rem; color: #475569;">
           Operational Demand Window: <strong>16:00 &ndash; 20:00</strong>
         </div>
       </header>
@@ -144,7 +144,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td colspan="11" style="text-align: center; color: #64748b;">Loading peak analytics...</td></tr>
+                  <tr><td colspan="11" style="text-align: center; color: #475569;">Loading peak analytics...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -458,7 +458,7 @@
             <div class="card-header">
               <div class="card-title">Append-Only Immutable Audit Trail (PRD Section 21)</div>
               <div>
-                <button class="btn btn-sm btn-secondary" onclick="downloadAuditExport()">Export Audit CSV &darr;</button>
+                <button class="btn btn-sm btn-secondary" data-dss-action="download-audit">Export Audit CSV &darr;</button>
               </div>
             </div>
             <div class="table-container">
@@ -498,13 +498,13 @@
                 <label>Provenance Source</label>
                 <input type="text" id="datasetSourceInput" class="form-control" value="University SCADA Archive">
               </div>
-              <button type="button" class="btn btn-secondary" onclick="previewDatasetFile()">1. Preview Columns & Map</button>
+              <button type="button" class="btn btn-secondary" data-dss-action="preview-dataset">1. Preview Columns & Map</button>
               <button type="submit" class="btn btn-primary" id="btnConfirmImport" style="display: none;">2. Confirm Import & Run DSS Pipeline</button>
             </form>
 
             <div id="datasetPreviewBox" style="display: none; margin-top: 20px; background: #f8fafc; padding: 16px; border-radius: 6px; border: 1px solid #e2e8f0;">
               <h4>Dataset Preview & Schema Mapping</h4>
-              <div id="previewMeta" style="font-size: 0.85rem; color: #64748b; margin: 8px 0;"></div>
+              <div id="previewMeta" style="font-size: 0.85rem; color: #475569; margin: 8px 0;"></div>
               <div style="margin-top: 12px;">
                 <label style="font-size: 0.82rem; font-weight: 700;">Column Mapping (Auto-Detected):</label>
                 <div id="mappingControls" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 6px;"></div>
@@ -527,14 +527,14 @@
               <div class="card-title">Offline Machine Learning Model Training (PRD Section 17)</div>
             </div>
             <div style="margin-bottom: 16px;">
-              <p style="font-size: 0.85rem; color: #64748b;">
+              <p style="font-size: 0.85rem; color: #475569;">
                 Models are optional enhancements strictly governed by Section 17. ML is only trained when the dataset has sufficient records and completeness. Time-aware validation prevents data leakage.
               </p>
             </div>
 
             <div style="display: flex; gap: 12px; margin-bottom: 20px;">
-              <button class="btn btn-secondary" onclick="checkMLSuitability()">1. Check Dataset Suitability</button>
-              <button class="btn btn-primary" onclick="trainMLModel()">2. Train Time-Aware Forecast Model</button>
+              <button class="btn btn-secondary" data-dss-action="check-ml-suitability">1. Check Dataset Suitability</button>
+              <button class="btn btn-primary" data-dss-action="train-ml-model">2. Train Time-Aware Forecast Model</button>
             </div>
 
             <div id="mlSuitabilityBox" style="display: none; padding: 16px; border-radius: 6px; margin-bottom: 20px;"></div>
@@ -558,41 +558,41 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
               <div class="card" style="margin-bottom: 0;">
                 <h4>Peak Demand Report</h4>
-                <p style="font-size: 0.8rem; color: #64748b; margin: 8px 0 16px 0;">16:00-20:00 demand metrics across all buildings.</p>
+                <p style="font-size: 0.8rem; color: #475569; margin: 8px 0 16px 0;">16:00-20:00 demand metrics across all buildings.</p>
                 <div style="display: flex; gap: 8px;">
-                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('PEAK_DEMAND', 'CSV')">CSV</button>
-                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('PEAK_DEMAND', 'JSON')">JSON</button>
-                  <button class="btn btn-sm btn-primary" onclick="downloadReport('PEAK_DEMAND', 'PDF')">PDF</button>
+                  <button class="btn btn-sm btn-secondary" data-dss-action="download-report" data-dss-args='["PEAK_DEMAND","CSV"]'>CSV</button>
+                  <button class="btn btn-sm btn-secondary" data-dss-action="download-report" data-dss-args='["PEAK_DEMAND","JSON"]'>JSON</button>
+                  <button class="btn btn-sm btn-primary" data-dss-action="download-report" data-dss-args='["PEAK_DEMAND","PDF"]'>PDF</button>
                 </div>
               </div>
 
               <div class="card" style="margin-bottom: 0;">
                 <h4>Data Quality Report</h4>
-                <p style="font-size: 0.8rem; color: #64748b; margin: 8px 0 16px 0;">Audit findings, missing intervals, negative spikes.</p>
+                <p style="font-size: 0.8rem; color: #475569; margin: 8px 0 16px 0;">Audit findings, missing intervals, negative spikes.</p>
                 <div style="display: flex; gap: 8px;">
-                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('DATA_QUALITY', 'CSV')">CSV</button>
-                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('DATA_QUALITY', 'JSON')">JSON</button>
-                  <button class="btn btn-sm btn-primary" onclick="downloadReport('DATA_QUALITY', 'PDF')">PDF</button>
+                  <button class="btn btn-sm btn-secondary" data-dss-action="download-report" data-dss-args='["DATA_QUALITY","CSV"]'>CSV</button>
+                  <button class="btn btn-sm btn-secondary" data-dss-action="download-report" data-dss-args='["DATA_QUALITY","JSON"]'>JSON</button>
+                  <button class="btn btn-sm btn-primary" data-dss-action="download-report" data-dss-args='["DATA_QUALITY","PDF"]'>PDF</button>
                 </div>
               </div>
 
               <div class="card" style="margin-bottom: 0;">
                 <h4>Human-AI Synergy Report</h4>
-                <p style="font-size: 0.8rem; color: #64748b; margin: 8px 0 16px 0;">DSS recommendations vs human reviews and overrides.</p>
+                <p style="font-size: 0.8rem; color: #475569; margin: 8px 0 16px 0;">DSS recommendations vs human reviews and overrides.</p>
                 <div style="display: flex; gap: 8px;">
-                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('HUMAN_AI_DECISION', 'CSV')">CSV</button>
-                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('HUMAN_AI_DECISION', 'JSON')">JSON</button>
-                  <button class="btn btn-sm btn-primary" onclick="downloadReport('HUMAN_AI_DECISION', 'PDF')">PDF</button>
+                  <button class="btn btn-sm btn-secondary" data-dss-action="download-report" data-dss-args='["HUMAN_AI_DECISION","CSV"]'>CSV</button>
+                  <button class="btn btn-sm btn-secondary" data-dss-action="download-report" data-dss-args='["HUMAN_AI_DECISION","JSON"]'>JSON</button>
+                  <button class="btn btn-sm btn-primary" data-dss-action="download-report" data-dss-args='["HUMAN_AI_DECISION","PDF"]'>PDF</button>
                 </div>
               </div>
 
               <div class="card" style="margin-bottom: 0;">
                 <h4>Daily Campus Summary</h4>
-                <p style="font-size: 0.8rem; color: #64748b; margin: 8px 0 16px 0;">Executive overview of building statuses.</p>
+                <p style="font-size: 0.8rem; color: #475569; margin: 8px 0 16px 0;">Executive overview of building statuses.</p>
                 <div style="display: flex; gap: 8px;">
-                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('DAILY_CAMPUS_SUMMARY', 'CSV')">CSV</button>
-                  <button class="btn btn-sm btn-secondary" onclick="downloadReport('DAILY_CAMPUS_SUMMARY', 'JSON')">JSON</button>
-                  <button class="btn btn-sm btn-primary" onclick="downloadReport('DAILY_CAMPUS_SUMMARY', 'PDF')">PDF</button>
+                  <button class="btn btn-sm btn-secondary" data-dss-action="download-report" data-dss-args='["DAILY_CAMPUS_SUMMARY","CSV"]'>CSV</button>
+                  <button class="btn btn-sm btn-secondary" data-dss-action="download-report" data-dss-args='["DAILY_CAMPUS_SUMMARY","JSON"]'>JSON</button>
+                  <button class="btn btn-sm btn-primary" data-dss-action="download-report" data-dss-args='["DAILY_CAMPUS_SUMMARY","PDF"]'>PDF</button>
                 </div>
               </div>
             </div>
@@ -612,7 +612,7 @@
               <div><strong>Mandatory Completeness Gate:</strong> 90.0%</div>
               <div><strong>System Mode:</strong> Offline-First, Advisory Only</div>
             </div>
-            <button class="btn btn-danger btn-sm" onclick="logout()" style="margin-top: 20px;">Sign Out</button>
+            <button class="btn btn-danger btn-sm" data-dss-action="logout" style="margin-top: 20px;">Sign Out</button>
           </div>
         </section>
       </div>
@@ -623,7 +623,7 @@
   <div id="reviewModal" class="modal-overlay" style="display: none;">
     <div class="modal-box">
       <h3 style="margin-bottom: 12px;" id="modalReviewTitle">Review Recommendation</h3>
-      <div id="modalReviewMeta" style="font-size: 0.85rem; color: #64748b; margin-bottom: 16px;"></div>
+      <div id="modalReviewMeta" style="font-size: 0.85rem; color: #475569; margin-bottom: 16px;"></div>
 
       <div class="form-group">
         <label>Management Action</label>
@@ -640,8 +640,8 @@
       </div>
 
       <div style="display: flex; justify-content: flex-end; gap: 8px;">
-        <button class="btn btn-secondary" onclick="closeReviewModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="submitModalReview()">Submit Decision</button>
+        <button class="btn btn-secondary" data-dss-action="close-review-modal">Cancel</button>
+        <button class="btn btn-primary" data-dss-action="submit-review">Submit Decision</button>
       </div>
     </div>
   </div>
@@ -650,7 +650,7 @@
   <div id="feedbackReviewModal" class="modal-overlay" style="display: none;">
     <div class="modal-box">
       <h3 style="margin-bottom: 12px;" id="modalFbTitle">Review Electrician Feedback</h3>
-      <div id="modalFbMeta" style="font-size: 0.85rem; color: #64748b; margin-bottom: 16px;"></div>
+      <div id="modalFbMeta" style="font-size: 0.85rem; color: #475569; margin-bottom: 16px;"></div>
 
       <div class="form-group">
         <label>Management Action</label>
@@ -667,15 +667,15 @@
       </div>
 
       <div style="display: flex; justify-content: flex-end; gap: 8px;">
-        <button class="btn btn-secondary" onclick="closeFeedbackReviewModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="submitFeedbackReviewModal()">Submit Review</button>
+        <button class="btn btn-secondary" data-dss-action="close-feedback-modal">Cancel</button>
+        <button class="btn btn-primary" data-dss-action="submit-feedback-review">Submit Review</button>
       </div>
     </div>
   </div>
 
   <!-- Scripts -->
+  <script src="/static/js/actions.js"></script>
   <script src="/static/js/explanation-panel.js"></script>
   <script src="/static/js/management.js"></script>
 </body>
 </html>
-

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /electrician
+Disallow: /management
+Disallow: /login/
+
+Sitemap: https://4pmspike.vercel.app/sitemap.xml

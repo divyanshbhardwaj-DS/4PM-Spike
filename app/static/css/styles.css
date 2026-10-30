@@ -8,25 +8,25 @@
   --card-bg: #ffffff;
   --border-color: #e2e8f0;
   --text-main: #0f172a;
-  --text-muted: #64748b;
+  --text-muted: #475569;
   --text-light: #94a3b8;
   
   --sev-critical: #dc2626;
   --sev-critical-bg: #fef2f2;
-  --sev-high: #ea580c;
+  --sev-high: #c2410c;
   --sev-high-bg: #fff7ed;
-  --sev-medium: #d97706;
+  --sev-medium: #a16207;
   --sev-medium-bg: #fffbeb;
-  --sev-low: #0284c7;
+  --sev-low: #0369a1;
   --sev-low-bg: #f0f9ff;
   --sev-info: #475569;
   --sev-info-bg: #f1f5f9;
 
-  --evi-e0: #64748b;
+  --evi-e0: #475569;
   --evi-e0-bg: #f1f5f9;
   --evi-e1: #2563eb;
   --evi-e1-bg: #eff6ff;
-  --evi-e2: #059669;
+  --evi-e2: #047857;
   --evi-e2-bg: #ecfdf5;
   --evi-e3: #b45309;
   --evi-e3-bg: #fef3c7;
@@ -556,4 +556,3 @@ body {
   padding: 24px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
-

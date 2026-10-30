@@ -50,14 +50,16 @@ Vercel's function filesystem is read-only except for its temporary directory. Wh
 
 ---
 
-## 3. Seed Credentials & User Personas
+## 3. Seed User Personas
 
-| Username | Password | Role | Assigned Facilities / Scope |
-|---|---|---|---|
-| `electrician1` | `sparky2026!` | `ELECTRICIAN` | Engineering Complex, Humanities Hall, North Campus Dorm |
-| `electrician2` | `current2026!` | `ELECTRICIAN` | Science Labs, Central Library, Athletics Center |
-| `manager1` | `director2026!` | `MANAGEMENT` | Campus-Wide Director of Energy Operations |
-| `admin1` | `admin2026!` | `ADMIN` | Campus Infrastructure System Administrator |
+| Username | Role | Assigned Facilities / Scope |
+|---|---|---|
+| `electrician1` | `ELECTRICIAN` | Engineering Complex, Humanities Hall, North Campus Dorm |
+| `electrician2` | `ELECTRICIAN` | Science Labs, Central Library, Athletics Center |
+| `manager1` | `MANAGEMENT` | Campus-Wide Director of Energy Operations |
+| `admin1` | `ADMIN` | Campus Infrastructure System Administrator |
+
+Passwords are not embedded in the login pages or published in this guide. Vercel deployments require `DSS_SECRET_KEY` and the sensitive `DSS_ELECTRICIAN1_PASSWORD`, `DSS_ELECTRICIAN2_PASSWORD`, `DSS_MANAGER_PASSWORD`, and `DSS_ADMIN_PASSWORD` environment variables. Local development uses non-production seed accounts.
 
 ---
 
