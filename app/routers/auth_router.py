@@ -174,6 +174,30 @@ def provision_user(
     }
 
 
+@router.get("/users")
+def list_users(
+    current_user: User = Depends(require_role(["ADMIN"])),
+    db: Session = Depends(get_db)
+):
+    users = db.query(User).order_by(User.created_at.desc(), User.id.desc()).all()
+    return [
+        {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "full_name": user.full_name,
+            "role": user.role,
+            "is_active": user.is_active,
+            "created_at": user.created_at.isoformat(),
+            "assigned_buildings": [
+                {"id": assignment.building.id, "name": assignment.building.name, "code": assignment.building.code}
+                for assignment in user.assignments
+            ]
+        }
+        for user in users
+    ]
+
+
 @router.get("/me")
 def get_me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     assigned_buildings = []

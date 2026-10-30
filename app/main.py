@@ -75,9 +75,17 @@ def get_electrician_login_page():
 def get_management_login_page():
     return FileResponse(STATIC_DIR / "login_management.html")
 
+@app.get("/login/admin", response_class=HTMLResponse)
+def get_admin_login_page():
+    return FileResponse(STATIC_DIR / "login_admin.html")
+
 @app.get("/electrician", response_class=HTMLResponse)
 def get_electrician_dashboard():
     return FileResponse(STATIC_DIR / "electrician_dashboard.html")
+
+@app.get("/admin", response_class=HTMLResponse)
+def get_admin_portal():
+    return FileResponse(STATIC_DIR / "admin_portal.html")
 
 @app.get("/management", response_class=HTMLResponse)
 def get_management_dashboard():

@@ -40,7 +40,7 @@ The system will start on `http://127.0.0.1:8000/`.
 ### Vercel deployment
 Vercel's function filesystem is read-only except for its temporary directory. For persistent application data, configure a managed PostgreSQL database (such as Neon) and set its pooled connection URL as the sensitive `DATABASE_URL` environment variable in Vercel. The app accepts PostgreSQL URLs beginning with `postgresql://` or `postgres://`. Before the first startup against a new database, also configure `DSS_SECRET_KEY` and all four seed-password secrets: `DSS_ELECTRICIAN1_PASSWORD`, `DSS_ELECTRICIAN2_PASSWORD`, `DSS_MANAGER_PASSWORD`, and `DSS_ADMIN_PASSWORD`. Install dependencies with `pip install -r requirements.txt` after updating them. If `DATABASE_URL` is unset, the app falls back to SQLite under `/tmp/4pmspike`; this storage is temporary and instance-local, and is not suitable for production data.
 
-Administrators can create electrician or management accounts using the authenticated `POST /api/auth/users` endpoint. Only an application user with the `ADMIN` role can call it. The endpoint generates an initial password and returns it once; copy and share it securely. For electricians, set `assign_all_buildings` to `true` to assign all buildings that currently exist, or provide `building_codes`. Production account creation is disabled until PostgreSQL is configured. A newly initialized persistent database is seeded on first startup; after setting the secrets above and redeploying, sign in as `admin1` at `/login/management` and use the authenticated endpoint to provision accounts.
+Administrators use `/login/admin` to sign in and `/admin` to open the protected account portal. The portal lists account names, roles, active status, and electrician building assignments, and can create electrician or management accounts. The underlying `GET` and `POST /api/auth/users` endpoints require the `ADMIN` role. New users receive a generated initial password displayed once; copy and share it securely. For electricians, the portal can assign all existing buildings or selected building codes. Production account creation is disabled until PostgreSQL is configured. A newly initialized persistent database is seeded on first startup; after setting the secrets above and redeploying, sign in as `admin1`.
 
 ### Portal Entry Points
 | Interface | Route | Purpose |
@@ -48,6 +48,8 @@ Administrators can create electrician or management accounts using the authentic
 | **Public Landing Page** | `http://localhost:8000/` | System overview, advisory positioning, role portal links |
 | **Electrician Login** | `http://localhost:8000/login/electrician` | Ground-level technical inspection & feedback |
 | **Management Login** | `http://localhost:8000/login/management` | Campus-wide analytics, review queue, overrides, audit |
+| **Administrator Portal** | `http://localhost:8000/admin` | Provision accounts and review access assignments |
+| **Administrator Login** | `http://localhost:8000/login/admin` | Administrator-only sign-in |
 | **Interactive API Docs** | `http://localhost:8000/docs` | OpenAPI / Swagger specification |
 
 ---

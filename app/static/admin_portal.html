@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Administrator Portal | DSS-1.0</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="admin-page">
+  <div class="admin-shell">
+    <header class="admin-topbar">
+      <div>
+        <p class="admin-eyebrow">DSS-1.0 · Campus Energy Intelligence</p>
+        <h1>Administrator Portal</h1>
+      </div>
+      <div class="admin-topbar-actions">
+        <span id="adminIdentity" class="admin-identity">Loading administrator…</span>
+        <a class="btn btn-secondary" href="/management">Management dashboard</a>
+        <button id="logoutButton" class="btn btn-secondary" type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <section class="admin-intro" aria-labelledby="account-management-title">
+        <div>
+          <h2 id="account-management-title">Account management</h2>
+          <p>Create staff accounts and grant electrician building access. Generated initial passwords are displayed only once.</p>
+        </div>
+        <div class="admin-stat" aria-live="polite">
+          <span id="accountCount">—</span>
+          <span>accounts</span>
+        </div>
+      </section>
+
+      <div id="pageError" class="admin-alert admin-alert-error" role="alert" hidden></div>
+
+      <div class="admin-grid">
+        <section class="admin-card" aria-labelledby="create-account-title">
+          <div class="admin-card-heading">
+            <div>
+              <p class="admin-eyebrow">Provision access</p>
+              <h2 id="create-account-title">Create account</h2>
+            </div>
+          </div>
+
+          <form id="createAccountForm">
+            <div class="admin-form-grid">
+              <div class="form-group">
+                <label for="fullName">Full name</label>
+                <input class="form-control" id="fullName" name="full_name" maxlength="100" autocomplete="name" required>
+              </div>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input class="form-control" id="username" name="username" minlength="3" maxlength="50" pattern="[A-Za-z0-9._\x2d]+" autocomplete="off" required>
+                <small>3–50 letters, numbers, dots, underscores or hyphens.</small>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" id="email" name="email" type="email" maxlength="100" autocomplete="email" required>
+              </div>
+              <div class="form-group">
+                <label for="role">Role</label>
+                <select class="form-control" id="role" name="role">
+                  <option value="ELECTRICIAN">Electrician</option>
+                  <option value="MANAGEMENT">Management</option>
+                </select>
+              </div>
+            </div>
+
+            <fieldset id="buildingAccess" class="admin-access-fieldset">
+              <legend>Building access</legend>
+              <label class="admin-check-row" for="allBuildings">
+                <input id="allBuildings" type="checkbox" checked>
+                <span>Assign access to all current buildings</span>
+              </label>
+              <div id="buildingPicker" hidden>
+                <label for="buildingCodes">Select assigned buildings</label>
+                <select class="form-control" id="buildingCodes" name="building_codes" multiple size="6"></select>
+                <small>Use Ctrl (Windows) or Command (Mac) to select multiple buildings.</small>
+              </div>
+            </fieldset>
+
+            <div id="formMessage" class="admin-alert" role="status" hidden></div>
+            <button id="createAccountButton" class="btn btn-primary" type="submit">Create account</button>
+          </form>
+
+          <section id="initialPasswordPanel" class="admin-password-panel" aria-labelledby="initialPasswordTitle" hidden>
+            <h3 id="initialPasswordTitle">Account created — copy the initial password</h3>
+            <p>This password will not be shown again. Share it directly with the new user using a secure channel.</p>
+            <div class="admin-copy-row">
+              <label class="sr-only" for="initialPassword">Generated initial password</label>
+              <input id="initialPassword" class="form-control" type="text" readonly autocomplete="off">
+              <button id="copyPasswordButton" class="btn btn-secondary" type="button">Copy</button>
+            </div>
+            <div id="copyMessage" class="admin-copy-message" role="status" aria-live="polite"></div>
+          </section>
+        </section>
+
+        <section class="admin-card admin-directory-card" aria-labelledby="directory-title">
+          <div class="admin-card-heading">
+            <div>
+              <p class="admin-eyebrow">Current access</p>
+              <h2 id="directory-title">Accounts</h2>
+            </div>
+            <button id="refreshUsersButton" class="btn btn-secondary btn-sm" type="button">Refresh</button>
+          </div>
+          <div id="directoryMessage" class="admin-alert" role="status" hidden></div>
+          <div class="table-container">
+            <table class="data-table admin-user-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name / username</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Buildings</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody id="userTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="/static/js/admin.js"></script>
+</body>
+</html>

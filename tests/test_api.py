@@ -18,6 +18,14 @@ def test_public_routes():
     res_mgmt_login = client.get("/login/management")
     assert res_mgmt_login.status_code == 200
 
+    res_admin_login = client.get("/login/admin")
+    assert res_admin_login.status_code == 200
+    assert "Administrator Sign In" in res_admin_login.text
+
+    res_admin_portal = client.get("/admin")
+    assert res_admin_portal.status_code == 200
+    assert "Administrator Portal" in res_admin_portal.text
+
 def test_authentication_workflows():
     # 1. Successful Electrician Login
     res_elec = client.post("/api/auth/login", json={"username": "electrician1", "password": "sparky2026!"})
@@ -173,6 +181,7 @@ def test_admin_can_create_electrician_assigned_to_all_buildings():
 
     denied = client.post("/api/auth/users", headers=electrician_headers, json=payload)
     assert denied.status_code == 403
+    assert client.get("/api/auth/users", headers=electrician_headers).status_code == 403
 
     try:
         created = client.post("/api/auth/users", headers=admin_headers, json=payload)
@@ -185,6 +194,14 @@ def test_admin_can_create_electrician_assigned_to_all_buildings():
         finally:
             db.close()
         assert user_data["initial_password"]
+        assert "hashed_password" not in user_data
+
+        directory = client.get("/api/auth/users", headers=admin_headers)
+        assert directory.status_code == 200
+        account = next(item for item in directory.json() if item["username"] == username)
+        assert account["role"] == "ELECTRICIAN"
+        assert len(account["assigned_buildings"]) == len(user_data["assigned_buildings"])
+        assert "hashed_password" not in account
 
         login = client.post(
             "/api/auth/login",

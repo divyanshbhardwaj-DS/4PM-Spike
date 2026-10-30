@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Administrator Login | DSS-1.0</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <style>
+    body {
+      background-color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px 0;
+    }
+    .auth-box {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      width: 440px;
+      max-width: 90vw;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .auth-header h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .auth-header p {
+      font-size: 0.85rem;
+      color: #475569;
+      margin-top: 4px;
+    }
+    .error-banner {
+      background: #fef2f2;
+      border: 1px solid #f87171;
+      color: #b91c1c;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+  </style>
+</head>
+<body data-portal-role="ADMIN">
+  <main class="auth-box">
+    <header class="auth-header">
+      <div aria-hidden="true" style="width: 48px; height: 48px; background: #eef2ff; color: #4338ca; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 1.4rem; font-weight: 700;">A</div>
+      <h1>Administrator Sign In</h1>
+      <p>Account provisioning and campus system access</p>
+    </header>
+
+    <div id="errorBanner" class="error-banner" role="alert"></div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" class="form-control" autocomplete="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" class="form-control" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">
+        Sign In to Administrator Portal &rarr;
+      </button>
+    </form>
+
+    <p style="text-align: center; margin-top: 24px; font-size: 0.82rem; color: #475569;">
+      <a href="/" style="color: #475569; text-decoration: none;">&larr; Back to Public Portal</a>
+    </p>
+  </main>
+  <script src="/static/js/login.js"></script>
+</body>
+</html>
