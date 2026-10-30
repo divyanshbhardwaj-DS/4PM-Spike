@@ -40,7 +40,7 @@
       display: flex;
       justify-content: center;
       gap: 32px;
-      max-width: 900px;
+      max-width: 1200px;
       margin: -40px auto 40px auto;
       padding: 0 20px;
       flex-wrap: wrap;
@@ -56,6 +56,8 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
+      flex: 1 1 300px;
+      max-width: 360px;
     }
     .login-card-icon {
       width: 56px;
@@ -165,6 +167,18 @@
           Campus-wide 4 PM peak analytics, submetering advisories, review electrician feedback, permitted decision overrides, model governance, and audit trails.
         </p>
         <a href="/login/management" class="btn btn-success" style="width: 100%;">Management Sign In &rarr;</a>
+      </div>
+
+      <!-- Administrator Entry -->
+      <div class="login-card">
+        <div class="login-card-icon" style="background-color: #eef2ff; color: #4338ca;">
+          <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l8 4v5c0 5-3.4 8-8 9-4.6-1-8-4-8-9V7l8-4zm-3 9l2 2 4-4"></path></svg>
+        </div>
+        <h2>Administrator Portal</h2>
+        <p>
+          Provision staff accounts, manage electrician building assignments, and review current account access.
+        </p>
+        <a href="/login/admin" class="btn btn-primary" style="width: 100%; background-color: #4338ca;">Administrator Sign In &rarr;</a>
       </div>
     </div>
 
